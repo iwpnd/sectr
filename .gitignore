@@ -1,3 +1,6 @@
+.ipynb_checkpoints/
+/tmp/
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
