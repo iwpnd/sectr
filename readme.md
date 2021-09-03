@@ -1,6 +1,6 @@
-# sectr
+# sectr 🍕
 
-Build a circular sector (pizza piece 😅) spanning the angle between two given bearings, a radius and a center point.
+Build a circular sector (pizza piece 😅 ) spanning the angle between two given bearings, a radius and a center point.
 
 ## installation
 
@@ -10,7 +10,23 @@ go get -u github.com/iwpnd/sectr
 
 ## usage
 
-tbc
+```
+package main
+
+import (
+  "fmt"
+
+  "github.com/iwpnd/sectr"
+  )
+
+func main() {
+  p := sectr.Point{Lat: 52.25, Lng: 13.37}
+	sector := sectr.NewSector(p, 100, 0, 90)
+
+  fmt.Printf("%s", sector.JSON())
+}
+
+```
 
 ## License
 
@@ -24,4 +40,4 @@ MIT
 
 Benjamin Ramser - [@iwpnd](https://github.com/iwpnd)
 
-Project Link: [https://github.com/iwpnd/tbox](https://github.com/iwpnd/tbox)
+Project Link: [https://github.com/iwpnd/sectr](https://github.com/iwpnd/sectr)
