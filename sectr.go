@@ -32,6 +32,7 @@ func distanceToRadians(distance float64) float64 {
 	return distance / r
 }
 
+// see https://www.movable-type.co.uk/scripts/latlong.html
 func bearing(start, end Point) float64 {
 	φ1 := degreeToRad(start.lat)
 	φ2 := degreeToRad(end.lat)
@@ -47,6 +48,7 @@ func bearing(start, end Point) float64 {
 	return math.Mod(θ*180/math.Pi+360, 360.0)
 }
 
+// see https://www.movable-type.co.uk/scripts/latlong.html
 func destination(start Point, distance, bearing float64) Point {
 	φ1 := degreeToRad(start.lat)
 	λ1 := degreeToRad(start.lng)
@@ -135,6 +137,6 @@ func (s *Sector) addPoint(p Point) {
 
 // JSON ...
 func (s Sector) JSON() string {
-	data, _ := json.Marshal(s)
-	return string(data)
+	j, _ := json.Marshal(s)
+	return string(j)
 }
