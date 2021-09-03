@@ -33,22 +33,6 @@ func distanceToRadians(distance float64) float64 {
 }
 
 // see https://www.movable-type.co.uk/scripts/latlong.html
-func bearing(start, end Point) float64 {
-	φ1 := degreeToRad(start.lat)
-	φ2 := degreeToRad(end.lat)
-	λ1 := degreeToRad(start.lng)
-	λ2 := degreeToRad(end.lng)
-
-	y := math.Sin(λ2-λ1) * math.Cos(φ2)
-
-	x := math.Cos(φ1)*math.Sin(φ2) - math.Sin(φ1)*math.Cos(φ2)*math.Cos(λ2-λ1)
-
-	θ := math.Atan2(y, x)
-
-	return math.Mod(θ*180/math.Pi+360, 360.0)
-}
-
-// see https://www.movable-type.co.uk/scripts/latlong.html
 func destination(start Point, distance, bearing float64) Point {
 	φ1 := degreeToRad(start.lat)
 	λ1 := degreeToRad(start.lng)
