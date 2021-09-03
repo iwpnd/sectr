@@ -10,7 +10,7 @@ go get -u github.com/iwpnd/sectr
 
 ## usage
 
-```
+```go
 package main
 
 import (
@@ -20,12 +20,11 @@ import (
   )
 
 func main() {
-  p := sectr.Point{Lat: 52.25, Lng: 13.37}
+   p := sectr.Point{Lat: 52.25, Lng: 13.37}
 	sector := sectr.NewSector(p, 100, 0, 90)
 
   fmt.Printf("%s", sector.JSON())
 }
-
 ```
 
 ## License
