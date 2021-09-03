@@ -27,6 +27,10 @@ func main() {
 }
 ```
 
+<p align="center">
+<img  src=".github/img/sectr.png"  alt="Logo"  width="500"  height="227">
+<p align="center">
+
 ## License
 
 MIT
