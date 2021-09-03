@@ -33,7 +33,7 @@ MIT
 
 ## Acknowledgement
 
-[Chris Veness](https://github.com/chrisveness) refreshing my university left-overs with this blog [moveable-type](https://www.movable-type.co.uk/scripts/latlong.html)
+[Chris Veness](https://github.com/chrisveness) for refreshing my university left-overs with this blog [moveable-type](https://www.movable-type.co.uk/scripts/latlong.html)
 
 ## Maintainer
 
