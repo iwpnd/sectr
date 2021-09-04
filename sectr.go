@@ -16,6 +16,10 @@ type Point struct {
 type Sector struct {
 	Type        string        `json:"type"`
 	Coordinates [][][]float64 `json:"coordinates"`
+	center      Point
+	radius      float64
+	bearing1    float64
+	bearing2    float64
 }
 
 func radToDegree(rad float64) float64 {
@@ -54,8 +58,9 @@ func destination(start Point, distance, bearing float64) Point {
 			math.Sin(φ1)*
 				math.Sin(φ2))
 
-	lng := radToDegree(λ2)
-	lat := radToDegree(φ2)
+	// cap decimals at .00000001 degree ~= 1.11mm
+	lng := math.Round(radToDegree(λ2)*100000000) / 100000000
+	lat := math.Round(radToDegree(φ2)*100000000) / 100000000
 
 	return Point{lng: lng, lat: lat}
 }
@@ -88,7 +93,13 @@ func NewSector(center Point, radius, bearing1, bearing2 float64) *Sector {
 
 	α := startDegree
 
-	sector := &Sector{Type: "Polygon"}
+	sector := &Sector{
+		Type:     "Polygon",
+		center:   center,
+		bearing1: bearing1,
+		bearing2: bearing2,
+		radius:   radius,
+	}
 
 	sector.addPoint(center)
 
