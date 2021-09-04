@@ -1,6 +1,6 @@
 # sectr 🍕
 
-Build a circular sector (pizza piece 😅 ) spanning the angle between two given bearings, a radius and a center point.
+Build a circular sector polygon feature (pizza piece 😅 ) spanning the angle between two given bearings, a radius and a center point.
 
 ## installation
 
