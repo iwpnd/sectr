@@ -14,12 +14,17 @@ type Point struct {
 
 // Sector ...
 type Sector struct {
-	Type        string        `json:"type"`
-	Coordinates [][][]float64 `json:"coordinates"`
+	coordinates [][][]float64
 	origin      Point
 	radius      float64
 	bearing1    float64
 	bearing2    float64
+}
+
+// SectorGeometry ...
+type SectorGeometry struct {
+	Type        string        `json:"type"`
+	Coordinates [][][]float64 `json:"coordinates"`
 }
 
 func radToDegree(rad float64) float64 {
@@ -79,14 +84,35 @@ func bearingToAngle(bearing float64) float64 {
 
 // NewSector creates a sector from a given origin point, a radius and two bearings
 func NewSector(origin Point, radius, bearing1, bearing2 float64) *Sector {
-	// to cap the maximum positions in a sector to 64 terminal + 2* origin
+
+	// to cap the maximum positions in a sector/circle to 64
 	// the higher the smoother, yet the bigger the coordinate array
 	const steps = 64
-	var endDegree float64
+
+	s := &Sector{
+		origin:   origin,
+		bearing1: bearing1,
+		bearing2: bearing2,
+		radius:   radius,
+	}
 
 	angle1 := bearingToAngle(bearing1)
 	angle2 := bearingToAngle(bearing2)
 
+	// if angle1 == angle2 return circle
+	if angle1 == angle2 {
+		for i := 1; i < steps; i++ {
+			α := float64(i * -360 / steps)
+			t := terminal(origin, radius, α)
+			s.addPoint(t)
+		}
+
+		s.coordinates[0] = append(s.coordinates[0], s.coordinates[0][0])
+
+		return s
+	}
+
+	var endDegree float64
 	startDegree := angle1
 
 	if angle1 < angle2 {
@@ -97,21 +123,12 @@ func NewSector(origin Point, radius, bearing1, bearing2 float64) *Sector {
 
 	α := startDegree
 
-	s := &Sector{
-		Type:     "Polygon",
-		origin:   origin,
-		bearing1: bearing1,
-		bearing2: bearing2,
-		radius:   radius,
-	}
-
 	s.addPoint(origin)
 
 	for i := 1; ; i++ {
 		if α < endDegree {
 			t := terminal(origin, radius, α)
 			s.addPoint(t)
-
 			α = startDegree + float64((i*360)/steps)
 		}
 
@@ -126,16 +143,17 @@ func NewSector(origin Point, radius, bearing1, bearing2 float64) *Sector {
 }
 
 func (s *Sector) addPoint(p Point) {
-	if len(s.Coordinates) == 0 {
-		s.Coordinates = append(s.Coordinates, [][]float64{{p.lng, p.lat}})
+	if len(s.coordinates) == 0 {
+		s.coordinates = append(s.coordinates, [][]float64{{p.lng, p.lat}})
 		return
 	}
 
-	s.Coordinates[0] = append(s.Coordinates[0], []float64{p.lng, p.lat})
+	s.coordinates[0] = append(s.coordinates[0], []float64{p.lng, p.lat})
 }
 
 // JSON exports the Sector as json string
 func (s Sector) JSON() string {
-	j, _ := json.Marshal(s)
+	f := SectorGeometry{Type: "Polygon", Coordinates: s.coordinates}
+	j, _ := json.Marshal(f)
 	return string(j)
 }

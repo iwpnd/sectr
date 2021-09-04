@@ -25,23 +25,23 @@ func BenchmarkSectr(b *testing.B) {
 
 func TestTerminal(t *testing.T) {
 	test := []struct {
-		start, expected   Point
+		origin, expected  Point
 		bearing, distance float64
 	}{
 		{
-			start:    Point{lng: 13.35, lat: 52.45},
+			origin:   Point{lng: 13.35, lat: 52.45},
 			distance: 1112.758,
 			bearing:  90,
 			expected: Point{lng: 13.3664, lat: 52.45},
 		},
 		{
-			start:    Point{lng: 0.0, lat: 0.0},
+			origin:   Point{lng: 0.0, lat: 0.0},
 			distance: 10000,
 			bearing:  180,
 			expected: Point{lng: 0.0, lat: -0.089932},
 		},
 		{
-			start:    Point{lng: 13.35, lat: -52.45},
+			origin:   Point{lng: 13.35, lat: -52.45},
 			distance: 10000,
 			bearing:  180,
 			expected: Point{lng: 13.35, lat: -52.539932},
@@ -49,7 +49,7 @@ func TestTerminal(t *testing.T) {
 	}
 
 	for _, test := range test {
-		got := terminal(test.start, test.distance, test.bearing)
+		got := terminal(test.origin, test.distance, test.bearing)
 
 		if !approxEqual(test.expected.lat, got.lat, 0.00001) {
 			t.Errorf("Expected %+v, got: %+v", test.expected.lat, got.lat)
@@ -59,4 +59,8 @@ func TestTerminal(t *testing.T) {
 			t.Errorf("Expected %+v, got: %+v", test.expected.lng, got.lng)
 		}
 	}
+}
+
+func TestSector(t *testing.T) {
+
 }
