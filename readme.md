@@ -10,6 +10,8 @@ go get -u github.com/iwpnd/sectr
 
 ## usage
 
+<img src=".github/img/sectr_bg.png"  alt="Logo"  width="500"  height="227">
+
 ```go
 package main
 
