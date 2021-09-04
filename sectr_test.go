@@ -19,7 +19,7 @@ func approxEqual(want, got, tolerance float64) bool {
 }
 
 func BenchmarkSectr(b *testing.B) {
-	p := Point{lng: 13.37, lat: 52.25}
+	p := Point{Lng: 13.37, Lat: 52.25}
 	NewSector(p, 1000, 0, 359)
 }
 
@@ -29,40 +29,40 @@ func TestTerminal(t *testing.T) {
 		bearing, distance float64
 	}{
 		{
-			origin:   Point{lng: 13.35, lat: 52.45},
+			origin:   Point{Lng: 13.35, Lat: 52.45},
 			distance: 1112.758,
 			bearing:  90,
-			expected: Point{lng: 13.3664, lat: 52.45},
+			expected: Point{Lng: 13.3664, Lat: 52.45},
 		},
 		{
-			origin:   Point{lng: 0.0, lat: 0.0},
+			origin:   Point{Lng: 0.0, Lat: 0.0},
 			distance: 10000,
 			bearing:  180,
-			expected: Point{lng: 0.0, lat: -0.089932},
+			expected: Point{Lng: 0.0, Lat: -0.089932},
 		},
 		{
-			origin:   Point{lng: 13.35, lat: -52.45},
+			origin:   Point{Lng: 13.35, Lat: -52.45},
 			distance: 10000,
 			bearing:  180,
-			expected: Point{lng: 13.35, lat: -52.539932},
+			expected: Point{Lng: 13.35, Lat: -52.539932},
 		},
 	}
 
 	for _, test := range test {
 		got := terminal(test.origin, test.distance, test.bearing)
 
-		if !approxEqual(test.expected.lat, got.lat, 0.00001) {
-			t.Errorf("Expected %+v, got: %+v", test.expected.lat, got.lat)
+		if !approxEqual(test.expected.Lat, got.Lat, 0.00001) {
+			t.Errorf("Expected %+v, got: %+v", test.expected.Lat, got.Lat)
 		}
 
-		if !approxEqual(test.expected.lng, got.lng, 0.00001) {
-			t.Errorf("Expected %+v, got: %+v", test.expected.lng, got.lng)
+		if !approxEqual(test.expected.Lng, got.Lng, 0.00001) {
+			t.Errorf("Expected %+v, got: %+v", test.expected.Lng, got.Lng)
 		}
 	}
 }
 
 func TestSector(t *testing.T) {
-	origin := Point{lat: 52.25, lng: 13.37}
+	origin := Point{Lat: 52.25, Lng: 13.37}
 	s := NewSector(origin, 100, 0, 90)
 
 	sj := s.JSON()
@@ -76,7 +76,7 @@ func TestSector(t *testing.T) {
 	}
 }
 func TestSectorCircle(t *testing.T) {
-	origin := Point{lat: 52.25, lng: 13.37}
+	origin := Point{Lat: 52.25, Lng: 13.37}
 	s := NewSector(origin, 100, 0, 0)
 
 	sj := s.JSON()

@@ -9,7 +9,7 @@ const earthRadius = 6371008.8 // earth radius
 
 // Point ...
 type Point struct {
-	lng, lat float64
+	Lng, Lat float64
 }
 
 // Sector ...
@@ -45,8 +45,8 @@ func distanceToRadians(distance float64) float64 {
 // from a given origin
 // see https://www.movable-type.co.uk/scripts/latlong.html
 func terminal(start Point, distance, bearing float64) Point {
-	φ1 := degreeToRad(start.lat)
-	λ1 := degreeToRad(start.lng)
+	φ1 := degreeToRad(start.Lat)
+	λ1 := degreeToRad(start.Lng)
 	bearingRad := degreeToRad(bearing)
 	distanceRad := distanceToRadians(distance)
 
@@ -69,7 +69,7 @@ func terminal(start Point, distance, bearing float64) Point {
 	lng := math.Round(radToDegree(λ2)*100000000) / 100000000
 	lat := math.Round(radToDegree(φ2)*100000000) / 100000000
 
-	return Point{lng: lng, lat: lat}
+	return Point{Lng: lng, Lat: lat}
 }
 
 func bearingToAngle(bearing float64) float64 {
@@ -144,11 +144,11 @@ func NewSector(origin Point, radius, bearing1, bearing2 float64) *Sector {
 
 func (s *Sector) addPoint(p Point) {
 	if len(s.coordinates) == 0 {
-		s.coordinates = append(s.coordinates, [][]float64{{p.lng, p.lat}})
+		s.coordinates = append(s.coordinates, [][]float64{{p.Lng, p.Lat}})
 		return
 	}
 
-	s.coordinates[0] = append(s.coordinates[0], []float64{p.lng, p.lat})
+	s.coordinates[0] = append(s.coordinates[0], []float64{p.Lng, p.Lat})
 }
 
 // JSON exports the Sector as json
