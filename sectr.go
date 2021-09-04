@@ -152,13 +152,9 @@ func (s *Sector) addPoint(p Point) {
 }
 
 // JSON exports the Sector as json
-func (s Sector) JSON() ([]byte, error) {
+func (s Sector) JSON() []byte {
 	f := SectorGeometry{Type: "Polygon", Coordinates: s.coordinates}
-	j, err := json.Marshal(f)
+	j, _ := json.Marshal(f)
 
-	if err != nil {
-		return nil, err
-	}
-
-	return j, nil
+	return j
 }

@@ -65,11 +65,7 @@ func TestSector(t *testing.T) {
 	origin := Point{lat: 52.25, lng: 13.37}
 	s := NewSector(origin, 100, 0, 90)
 
-	sj, err := s.JSON()
-
-	if err != nil {
-		t.Fatalf("Should've created sector geometry json but got %v", err)
-	}
+	sj := s.JSON()
 
 	if !bytes.Contains(sj, []byte(`"type":"Polygon"`)) {
 		t.Errorf("Sector geometry should have type Polygon")
@@ -83,11 +79,7 @@ func TestSectorCircle(t *testing.T) {
 	origin := Point{lat: 52.25, lng: 13.37}
 	s := NewSector(origin, 100, 0, 0)
 
-	sj, err := s.JSON()
-
-	if err != nil {
-		t.Fatalf("Should've created sector geometry json but got %v", err)
-	}
+	sj := s.JSON()
 
 	if !bytes.Contains(sj, []byte(`"type":"Polygon"`)) {
 		t.Errorf("Sector geometry should have type Polygon")
