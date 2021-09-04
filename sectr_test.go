@@ -1,11 +1,11 @@
 package sectr
 
 import (
-	"fmt"
 	"math"
 	"testing"
 )
 
+// test helper to appoximate coordinate equality
 func approxEqual(want, got, tolerance float64) bool {
 	diff := math.Abs(want - got)
 	mean := math.Abs(want+got) / 2
@@ -23,7 +23,7 @@ func BenchmarkSectr(b *testing.B) {
 	sectr.JSON()
 }
 
-func TestDestination(t *testing.T) {
+func TestTerminal(t *testing.T) {
 	test := []struct {
 		start, expected   Point
 		bearing, distance float64
@@ -49,8 +49,7 @@ func TestDestination(t *testing.T) {
 	}
 
 	for _, test := range test {
-		got := destination(test.start, test.distance, test.bearing)
-		fmt.Println("got: ", got)
+		got := terminal(test.start, test.distance, test.bearing)
 
 		if !approxEqual(test.expected.lat, got.lat, 0.00001) {
 			t.Errorf("Expected %+v, got: %+v", test.expected.lat, got.lat)

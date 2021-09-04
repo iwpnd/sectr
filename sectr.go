@@ -16,7 +16,7 @@ type Point struct {
 type Sector struct {
 	Type        string        `json:"type"`
 	Coordinates [][][]float64 `json:"coordinates"`
-	center      Point
+	origin      Point
 	radius      float64
 	bearing1    float64
 	bearing2    float64
@@ -36,8 +36,10 @@ func distanceToRadians(distance float64) float64 {
 	return distance / r
 }
 
+// terminal calculates the terminal position travelling a distance
+// from a given origin
 // see https://www.movable-type.co.uk/scripts/latlong.html
-func destination(start Point, distance, bearing float64) Point {
+func terminal(start Point, distance, bearing float64) Point {
 	φ1 := degreeToRad(start.lat)
 	λ1 := degreeToRad(start.lng)
 	bearingRad := degreeToRad(bearing)
@@ -75,9 +77,11 @@ func bearingToAngle(bearing float64) float64 {
 	return angle
 }
 
-// NewSector ...
-func NewSector(center Point, radius, bearing1, bearing2 float64) *Sector {
-	const steps = 64 // fix for now
+// NewSector creates a sector from a given origin point, a radius and two bearings
+func NewSector(origin Point, radius, bearing1, bearing2 float64) *Sector {
+	// to cap the maximum positions in a sector to 64 terminal + 2* origin
+	// the higher the smoother, yet the bigger the coordinate array
+	const steps = 64
 	var endDegree float64
 
 	angle1 := bearingToAngle(bearing1)
@@ -93,30 +97,30 @@ func NewSector(center Point, radius, bearing1, bearing2 float64) *Sector {
 
 	α := startDegree
 
-	sector := &Sector{
+	s := &Sector{
 		Type:     "Polygon",
-		center:   center,
+		origin:   origin,
 		bearing1: bearing1,
 		bearing2: bearing2,
 		radius:   radius,
 	}
 
-	sector.addPoint(center)
+	s.addPoint(origin)
 
 	for i := 1; ; i++ {
 		if α < endDegree {
-			d := destination(center, radius, α)
-			sector.addPoint(d)
+			t := terminal(origin, radius, α)
+			s.addPoint(t)
 
 			α = startDegree + float64((i*360)/steps)
 		}
 
 		if α >= endDegree {
-			d := destination(center, radius, endDegree)
-			sector.addPoint(d)
-			sector.addPoint(center)
+			t := terminal(origin, radius, endDegree)
+			s.addPoint(t)
+			s.addPoint(origin)
 
-			return sector
+			return s
 		}
 	}
 }
@@ -130,7 +134,7 @@ func (s *Sector) addPoint(p Point) {
 	s.Coordinates[0] = append(s.Coordinates[0], []float64{p.lng, p.lat})
 }
 
-// JSON ...
+// JSON exports the Sector as json string
 func (s Sector) JSON() string {
 	j, _ := json.Marshal(s)
 	return string(j)
