@@ -20,8 +20,7 @@ func approxEqual(want, got, tolerance float64) bool {
 
 func BenchmarkSectr(b *testing.B) {
 	p := Point{lng: 13.37, lat: 52.25}
-	sectr := NewSector(p, 1000, 0, 359)
-	sectr.JSON()
+	NewSector(p, 1000, 0, 359)
 }
 
 func TestTerminal(t *testing.T) {
